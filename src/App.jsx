@@ -1,9 +1,24 @@
-import "./App.css";
-
+import { Outlet } from "react-router-dom";
+import Appbar from "./componets/Appbar";
+import { FiSidebar } from "react-icons/fi";
+import { useState } from "react";
 function App() {
-  const [count, setCount] = useState(0);
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <div
+        className="pl-60 pt-5 text-xl cursor-pointer w-full bg-[#222] text-white"
+        onClick={() => setOpen(!open)}
+      >
+        {<Appbar />}
+        <FiSidebar />
+      </div>
 
-  return <></>;
+      <div className="pl-60 pt-8 h-[94dvh] bg-[#222] text-white">
+        <Outlet />
+      </div>
+    </div>
+  );
 }
 
 export default App;
