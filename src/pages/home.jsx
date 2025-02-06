@@ -9,7 +9,7 @@ export default function Home() {
   const [prediction, setPrediction] = useState("");
   const [res, setRes] = useState("");
   const [triger, setTriger] = useState(false);
-  const [open, setopen] = useState(false);
+  const [open, setopen] = useState(true);
   const [form, setForm] = useState({
     pregnancies: null,
     glucose: null,
@@ -93,7 +93,7 @@ export default function Home() {
   }
 
   return (
-    <div className="h-full  flex px-12 ">
+    <div className="h-full flex px-10  ">
       <div className=" h-full  w-[70%] ">
         {open && <Popup handleclose={handleclose} prediction={prediction} />}
         <form onSubmit={fetchprediction}>
@@ -204,19 +204,29 @@ export default function Home() {
               />
             </div>
             <div>
-              <Button variant="contained" type="submit" sx={{ width: "18rem" }}>
+              <Button
+                variant="contained"
+                type="submit"
+                sx={{
+                  width: "18rem",
+                  marginTop: 2,
+                  backgroundColor: "#00B0FF",
+                  borderRadius: "0.4rem",
+                }}
+              >
                 predict{" "}
               </Button>
             </div>
           </div>
         </form>
       </div>
-      <div className=" h-full bg-slate-700 rounded-lg  w-[40%]  p-8 overflow-scroll">
+
+      <div className=" h-full bg-slate-700 rounded-lg   w-[40%]  p-8 overflow-scroll">
         {res == "" &&
           (message == "" ? (
             <span className="h-full flex justify-center items-center text-xl text-center font-bold">
               😃 Please tell me the information of your self i will predict your
-              debate and give you a recomendation
+              Diabate and give you a recomendation
             </span>
           ) : (
             ""
