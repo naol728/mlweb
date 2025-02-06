@@ -38,6 +38,7 @@ export default function Analytics() {
               // Target the x-axis text
               "& .MuiChartsAxis-tickLabel": {
                 fill: "white", // Change this to your desired color
+                color: "white",
               },
             }}
           />
