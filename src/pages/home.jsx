@@ -9,7 +9,7 @@ export default function Home() {
   const [prediction, setPrediction] = useState("");
   const [res, setRes] = useState("");
   const [triger, setTriger] = useState(false);
-  const [open, setopen] = useState(true);
+  const [open, setopen] = useState(false);
   const [form, setForm] = useState({
     pregnancies: null,
     glucose: null,
