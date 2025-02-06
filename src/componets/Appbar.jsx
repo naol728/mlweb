@@ -36,7 +36,7 @@ export default function Appbar() {
             cursor: "pointer",
           }}
         >
-          Clinic
+          Diabate
         </Typography>
         <ListItem
           button
