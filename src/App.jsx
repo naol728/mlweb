@@ -14,7 +14,7 @@ function App() {
         <FiSidebar />
       </div>
 
-      <div className="pl-60 pt-8 h-[94dvh] bg-[#222] text-white">
+      <div className="pl-56 pt-5 h-[94dvh]  bg-[#222] text-white">
         <Outlet />
       </div>
     </div>

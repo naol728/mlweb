@@ -1,18 +1,35 @@
 import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import Popup from "../componets/Popup";
+import axios from "axios";
 
 export default function Home() {
   const [message, setMessage] = useState("");
   const [prompot, setPrompot] = useState("");
+  const [prediction, setPrediction] = useState("");
   const [res, setRes] = useState("");
   const [triger, setTriger] = useState(false);
-  async function handleleasen() {
-    const res = await fetch(
-      "https://naol.app.n8n.cloud/webhook-test/2036bb49-7094-4706-8743-63249381d532"
-    );
-    console.log(res);
+  const [open, setopen] = useState(false);
+  const [form, setForm] = useState({
+    pregnancies: null,
+    glucose: null,
+    blood_pressure: null,
+    skin_thickness: null,
+    insulin: null,
+    bmi: null,
+    diabetes_pedigree_function: null,
+    age: null,
+  });
+  function handleform(e) {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: Number(value),
+    }));
   }
+
   const url = "https://copilot5.p.rapidapi.com/copilot";
+
   const options = {
     method: "POST",
     headers: {
@@ -21,52 +38,190 @@ export default function Home() {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      message: `${prompot}`,
+      message: ` Given the following health data:
+    Age: ${form.age}
+    BMI: ${form.bmi}
+    Blood Pressure: ${form.blood_pressure}
+    Glucose Level: ${form.glucose}
+    Cholesterol Level: ${form.insulin}
+
+    Provide personalized health advice including diet, exercise, and medical recommendations. `,
       conversation_id: null,
       tone: "BALANCED",
       markdown: false,
       photo_url: null,
     }),
   };
+
   useEffect(() => {}, [triger, setTriger]);
+
+  async function fetchprediction(e) {
+    e.preventDefault();
+    const numericForm = Object.fromEntries(
+      Object.entries(form).map(([key, value]) => [key, Number(value)])
+    );
+    setopen(true);
+    try {
+      const response = await axios.post(
+        "https://ml-2-0dlr.onrender.com/predict",
+        numericForm
+      );
+      console.log(response);
+      setPrediction(response.data.prediction);
+      await fectchdata();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async function fectchdata() {
-    console.log("fetching musics based on your prompot ");
+    console.log("fetching answer from the server");
     try {
       const response = await fetch(url, options);
       const result = await response.json();
       console.log(result);
       setTriger(true);
       setRes(result.data.message);
+      console.log(result.data.message);
     } catch (error) {
       console.error(error);
     }
   }
-  return (
-    <div className="h-full">
-      <div className="h-[65%]   pr-20">
-        {/* {message == "" ? (
-          <span className="h-full flex justify-center items-center text-3xl font-bold">
-            😃 Please tell me the symptoms of your sickness 👨
-          </span>
-        ) : (
-          ""
-        )} */}
-        {res}
-      </div>
 
-      <div className="h-[35%]  flex justify-center items-center">
-        <textarea
-          type="text"
-          className="w-[75%] min-h-[50%] rounded-lg bg-slate-800 border-none px-4 py-2 text-white"
-          placeholder="how do you feel please tell me the symptom of your sickness"
-          value={prompot}
-          onChange={(e) => setPrompot(e.target.value)}
-        />
-        <div className="w-[20%] ml-4">
-          <Button variant="contained" onClick={fectchdata}>
-            Submit
-          </Button>
-        </div>
+  function handleclose() {
+    setopen(!open);
+  }
+
+  return (
+    <div className="h-full  flex px-12 ">
+      <div className=" h-full  w-[70%] ">
+        {open && <Popup handleclose={handleclose} prediction={prediction} />}
+        <form onSubmit={fetchprediction}>
+          <div className=" h-full flex flex-col justify-center items-center space-y-2  w-[70%]">
+            <div className="w-full flex flex-col space-x-3 justify-center items-center shadow-lg ">
+              <label htmlFor="" className="self-start font-bold pl-14">
+                Pregnancies
+              </label>
+              <input
+                type="number"
+                className="w-96 bg-slate-700 px-2 py-1 border-none rounded-md shadow-xl "
+                name="pregnancies"
+                value={form.pregnancies}
+                onChange={handleform}
+                required
+              />
+            </div>
+
+            <div className="w-full flex flex-col space-x-3  justify-center items-center">
+              <label htmlFor="" className="self-start font-bold pl-14">
+                glucose
+              </label>
+              <input
+                type="number"
+                className="w-96 bg-slate-700 px-2 py-1 border-none rounded-md shadow-xl"
+                name="glucose"
+                value={form.glucose}
+                onChange={handleform}
+                required
+              />
+            </div>
+            <div className="w-full flex flex-col space-x-3  justify-center items-center">
+              <label htmlFor="" className="self-start font-bold pl-14">
+                blood pressure
+              </label>
+              <input
+                type="number"
+                className="w-96 bg-slate-700 px-2 py-1 border-none rounded-md shadow-xl"
+                name="blood_pressure"
+                value={form.blood_pressure}
+                onChange={handleform}
+                required
+              />
+            </div>
+            <div className="w-full flex flex-col space-x-3  justify-center items-center">
+              <label htmlFor="" className="self-start font-bold pl-14">
+                skin thickness
+              </label>
+              <input
+                type="number"
+                className="w-96 bg-slate-700 px-2 py-1 border-none rounded-md shadow-xl"
+                name="skin_thickness"
+                value={form.skin_thickness}
+                onChange={handleform}
+                required
+              />
+            </div>
+            <div className="w-full flex flex-col space-x-3  justify-center items-center">
+              <label htmlFor="" className="self-start font-bold pl-14">
+                insulin
+              </label>
+              <input
+                type="number"
+                className="w-96 bg-slate-700 px-2 py-1 border-none rounded-md shadow-xl"
+                name="insulin"
+                value={form.insulin}
+                onChange={handleform}
+                required
+              />
+            </div>
+            <div className="w-full flex flex-col space-x-3  justify-center items-center">
+              <label htmlFor="" className="self-start font-bold pl-14">
+                bmi
+              </label>
+              <input
+                type="number"
+                className="w-96 bg-slate-700 px-2 py-1 border-none rounded-md shadow-xl"
+                name="bmi"
+                value={form.bmi}
+                onChange={handleform}
+                required
+              />
+            </div>
+            <div className="w-full flex flex-col space-x-3    justify-center items-center">
+              <label htmlFor="" className="self-start font-bold pl-14">
+                diabetes pedigree function
+              </label>
+              <input
+                type="number"
+                className="w-96 bg-slate-700 px-2 py-1 border-none rounded-md shadow-xl"
+                name="diabetes_pedigree_function"
+                value={form.diabetes_pedigree_function}
+                onChange={handleform}
+                required
+              />
+            </div>
+            <div className="w-full flex flex-col space-x-3  justify-center items-center">
+              <label htmlFor="" className="self-start font-bold pl-14">
+                age
+              </label>
+              <input
+                type="number"
+                className="w-96 bg-slate-700 px-2 py-1 border-none rounded-md shadow-xl"
+                name="age"
+                value={form.age}
+                onChange={handleform}
+                required
+              />
+            </div>
+            <div>
+              <Button variant="contained" type="submit" sx={{ width: "18rem" }}>
+                predict{" "}
+              </Button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div className=" h-full bg-slate-700 rounded-lg  w-[40%]  p-8 overflow-scroll">
+        {res == "" &&
+          (message == "" ? (
+            <span className="h-full flex justify-center items-center text-xl text-center font-bold">
+              😃 Please tell me the information of your self i will predict your
+              debate and give you a recomendation
+            </span>
+          ) : (
+            ""
+          ))}
+        {res}
       </div>
     </div>
   );

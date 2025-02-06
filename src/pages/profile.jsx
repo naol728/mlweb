@@ -22,11 +22,11 @@ function Profile() {
               />
             </div>
             <div className="text-center text-2xl font-bold">
-              <span className="text-slate-100">Name :</span>
+              <span className="text-slate-100"></span>
               <span className="text-slate-300"> Naol Mesert</span>
             </div>
             <div className="text-center text-2xl font-bold">
-              <span className="text-slate-100"> email :</span>
+              <span className="text-slate-100"> </span>
               <span className="text-slate-300">naolmeseret22@gmail.com</span>
             </div>
           </div>

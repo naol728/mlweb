@@ -18,10 +18,12 @@ export default function Appbar() {
       <List
         sx={{
           width: 200,
-          mt: 3,
+
           fontSize: "2rem",
           height: "100vh",
           shadow: "2px 2px 4px #000000",
+          backgroundColor: "#222",
+          color: "#fff",
         }}
       >
         <Typography
@@ -82,7 +84,7 @@ export default function Appbar() {
           </Link>
         </ListItem>
         <ListItem button sx={{ padding: "1rem 1rem" }}>
-          <IoMdSettings />
+          {/* <IoMdSettings />
           <Link to="/setting">
             <ListItemText
               primary="Setting"
@@ -93,7 +95,7 @@ export default function Appbar() {
                 cursor: "pointer",
               }}
             />
-          </Link>
+          </Link>*/}
         </ListItem>
       </List>
     </Drawer>
